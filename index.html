@@ -57,6 +57,10 @@
                     <i class="fa-solid fa-box"></i>
                     <span>Inventario</span>
                 </a>
+                <a href="#" class="nav-item" data-view="loans">
+                    <i class="fa-solid fa-hand-holding-hand"></i>
+                    <span>Préstamos</span>
+                </a>
                 <a href="#" class="nav-item" data-view="delivery">
                     <i class="fa-solid fa-truck-ramp-box"></i>
                     <span>Entregas</span>
@@ -268,6 +272,38 @@
                     </div>
                 </section>
 
+                <!-- Loans View -->
+                <section id="view-loans" class="view">
+                    <div class="view-header">
+                        <h1>Préstamos de Equipos</h1>
+                        <div class="header-actions">
+                            <button class="btn btn-primary" id="btn-new-loan">
+                                <i class="fa-solid fa-plus"></i>
+                                Nuevo Préstamo
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Equipo</th>
+                                        <th>Funcionario</th>
+                                        <th>Devolución</th>
+                                        <th>Estado</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="loans-table-body">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Staff View -->
                 <section id="view-staff" class="view">
                     <div class="view-header">
@@ -371,6 +407,40 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="ui.closeModals()">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar Funcionario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loan Modal -->
+    <div id="loan-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Registrar Préstamo</h2>
+                <button class="btn-close" onclick="ui.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="loan-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Equipo / Material</label>
+                        <select id="loan-product" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Funcionario</label>
+                        <select id="loan-staff" class="form-control" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Fecha Estimada de Devolución</label>
+                        <input type="date" id="loan-return-date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Observaciones</label>
+                        <textarea id="loan-obs" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="ui.closeModals()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Préstamo</button>
                 </div>
             </form>
         </div>

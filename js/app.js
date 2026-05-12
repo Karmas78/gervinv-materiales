@@ -7,6 +7,7 @@ import { auth } from './modules/auth.js';
 import { products } from './modules/products.js';
 import { delivery } from './modules/delivery.js';
 import { staff } from './modules/staff.js';
+import { loans } from './modules/loans.js';
 
 const app = {
     async init() {
@@ -56,6 +57,10 @@ const app = {
         if (collectionName === 'funcionarios') {
             staff.renderStaff();
             delivery.renderStaffSelect();
+            loans.fillSelectors();
+        }
+        if (collectionName === 'prestamos') {
+            loans.renderLoans();
         }
     },
 
@@ -86,6 +91,11 @@ const app = {
                 e.preventDefault();
                 const viewId = item.dataset.view;
                 ui.toggleView(viewId);
+                
+                // Refresh data if needed
+                if (viewId === 'history') this.renderHistory();
+                if (viewId === 'staff') staff.renderStaff();
+                if (viewId === 'loans') loans.renderLoans();
             });
         });
 
@@ -133,6 +143,29 @@ const app = {
                 departamento: document.getElementById('staff-dept').value
             };
             await staff.save(formData);
+        });
+
+        // Loans
+        document.getElementById('btn-new-loan').addEventListener('click', () => {
+            document.getElementById('loan-form').reset();
+            loans.fillSelectors();
+            ui.openModal('loan-modal');
+        });
+
+        document.getElementById('loan-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const prodSelect = document.getElementById('loan-product');
+            const staffSelect = document.getElementById('loan-staff');
+            
+            const formData = {
+                producto_id: prodSelect.value,
+                producto_nombre: prodSelect.options[prodSelect.selectedIndex].text.split(' (')[0],
+                funcionario_id: staffSelect.value,
+                funcionario_nombre: staffSelect.options[staffSelect.selectedIndex].text,
+                fecha_devolucion_prevista: document.getElementById('loan-return-date').value,
+                observaciones: document.getElementById('loan-obs').value
+            };
+            await loans.create(formData);
         });
 
         // Theme Toggle

@@ -27,7 +27,8 @@ class Database {
         this.cache = {
             productos: [],
             movimientos: [],
-            funcionarios: []
+            funcionarios: [],
+            prestamos: []
         };
     }
 
@@ -52,6 +53,12 @@ class Database {
         onSnapshot(collection(db_firestore, 'funcionarios'), (snapshot) => {
             this.cache.funcionarios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             if (onUpdateCallback) onUpdateCallback('funcionarios');
+        });
+
+        // Escuchar Préstamos
+        onSnapshot(collection(db_firestore, 'prestamos'), (snapshot) => {
+            this.cache.prestamos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            if (onUpdateCallback) onUpdateCallback('prestamos');
         });
     }
 
@@ -133,6 +140,58 @@ class Database {
 
     getFuncionarios() {
         return this.cache.funcionarios;
+    }
+
+    getPrestamos() {
+        return this.cache.prestamos;
+    }
+
+    async crearPrestamo(data) {
+        const prestamoId = `LN-${Date.now()}`;
+        const ref = doc(db_firestore, 'prestamos', prestamoId);
+        
+        const payload = {
+            producto_id: data.producto_id,
+            producto_nombre: data.producto_nombre,
+            funcionario_id: data.funcionario_id,
+            funcionario_nombre: data.funcionario_nombre,
+            fecha_prestamo: new Date().toISOString(),
+            fecha_devolucion_prevista: data.fecha_devolucion_prevista,
+            estado: 'PENDIENTE',
+            observaciones: data.observaciones || ''
+        };
+
+        // Registrar la SALIDA de stock
+        await this.registrarMovimiento({
+            tipo: 'SALIDA',
+            producto_id: data.producto_id,
+            cantidad: 1,
+            responsable: data.funcionario_nombre,
+            referencia: `Préstamo Temporal - Ref: ${prestamoId}`
+        });
+
+        await setDoc(ref, payload);
+    }
+
+    async devolverPrestamo(prestamoId) {
+        const prestamo = this.cache.prestamos.find(p => p.id === prestamoId);
+        if (!prestamo) throw new Error('Préstamo no encontrado');
+
+        const ref = doc(db_firestore, 'prestamos', prestamoId);
+
+        // Registrar la ENTRADA de stock
+        await this.registrarMovimiento({
+            tipo: 'ENTRADA',
+            producto_id: prestamo.producto_id,
+            cantidad: 1,
+            responsable: 'Sistema (Devolución)',
+            referencia: `Devolución de Préstamo - Ref: ${prestamoId}`
+        });
+
+        await updateDoc(ref, {
+            estado: 'DEVUELTO',
+            fecha_devolucion_real: new Date().toISOString()
+        });
     }
 
     async saveFuncionario(data) {
