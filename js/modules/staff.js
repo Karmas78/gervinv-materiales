@@ -1,0 +1,50 @@
+/**
+ * Staff Module - Personnel Management
+ */
+import { db } from '../db.js';
+import { ui } from './ui.js';
+
+export const staff = {
+    renderStaff() {
+        const list = db.getFuncionarios();
+        const tbody = document.getElementById('staff-table-body');
+        if (!tbody) return;
+        
+        tbody.innerHTML = list.map(s => `
+            <tr>
+                <td><strong>${s.nombre}</strong></td>
+                <td>${s.rut}</td>
+                <td>${s.departamento}</td>
+                <td>
+                    <button class="btn-icon" onclick="staff.edit('${s.id}')"><i class="fa-solid fa-pen"></i></button>
+                </td>
+            </tr>
+        `).join('');
+    },
+
+    async save(formData) {
+        try {
+            await db.saveFuncionario(formData);
+            ui.showToast('Funcionario guardado correctamente', 'success');
+            ui.closeModals();
+            this.renderStaff();
+        } catch (error) {
+            ui.showToast(error.message, 'danger');
+        }
+    },
+
+    edit(id) {
+        const s = db.getFuncionarios().find(f => f.id === id);
+        if (!s) return;
+        
+        document.getElementById('staff-modal-title').innerText = 'Editar Funcionario';
+        document.getElementById('staff-id').value = s.id;
+        document.getElementById('staff-name').value = s.nombre;
+        document.getElementById('staff-rut').value = s.rut;
+        document.getElementById('staff-dept').value = s.departamento;
+        
+        ui.openModal('staff-modal');
+    }
+};
+
+window.staff = staff;

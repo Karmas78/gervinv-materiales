@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GervInv - Gestión de Materiales</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="auth-overlay active">
+        <div class="auth-card">
+            <div class="auth-header">
+                <i class="fa-solid fa-boxes-stacked logo-icon"></i>
+                <h1>Gerv<span>Inv</span></h1>
+                <p>Materiales & Suministros</p>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Correo Electrónico</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="login-email" placeholder="ejemplo@escuela.cl" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="login-btn">
+                    <span>Iniciar Sesión</span>
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- App Layout (Hidden by default) -->
+    <div id="app-shell" class="app-shell" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <h2>Gerv<span>Inv</span></h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-view="dashboard">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Panel General</span>
+                </a>
+                <a href="#" class="nav-item" data-view="inventory">
+                    <i class="fa-solid fa-box"></i>
+                    <span>Inventario</span>
+                </a>
+                <a href="#" class="nav-item" data-view="delivery">
+                    <i class="fa-solid fa-truck-ramp-box"></i>
+                    <span>Entregas</span>
+                </a>
+                <a href="#" class="nav-item" data-view="history">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                    <span>Movimientos</span>
+                </a>
+                <a href="#" class="nav-item" data-view="staff">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Funcionarios</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar" id="user-avatar">?</div>
+                    <div class="user-details">
+                        <span class="user-name" id="user-name">Usuario</span>
+                        <button class="btn-logout" id="logout-btn">Cerrar Sesión</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-bar">
+                <div class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="global-search" placeholder="Buscar materiales, folios, funcionarios...">
+                </div>
+                <div class="top-actions">
+                    <button class="btn-icon" id="theme-toggle" title="Cambiar Tema">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                    <button class="btn-icon notification-btn" id="notif-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge" id="notif-badge">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dynamic Views Container -->
+            <div id="view-container" class="view-container">
+                <!-- Dashboard View -->
+                <section id="view-dashboard" class="view active">
+                    <div class="view-header">
+                        <h1>Panel General</h1>
+                        <p>Estado actual de los materiales y alertas de stock.</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon purple"><i class="fa-solid fa-box-open"></i></div>
+                            <div class="stat-info">
+                                <h3>Total Productos</h3>
+                                <p class="stat-value" id="stat-total-products">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <div class="stat-info">
+                                <h3>Stock Crítico</h3>
+                                <p class="stat-value" id="stat-critical-stock">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon blue"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                            <div class="stat-info">
+                                <h3>Entregas Hoy</h3>
+                                <p class="stat-value" id="stat-deliveries-today">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Critical Stock Table -->
+                    <div class="card mt-20">
+                        <div class="card-header">
+                            <h2><i class="fa-solid fa-bell"></i> Alertas de Stock</h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Stock Actual</th>
+                                        <th>Mínimo</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="critical-stock-table">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Inventory View -->
+                <section id="view-inventory" class="view">
+                    <div class="view-header">
+                        <h1>Gestión de Inventario</h1>
+                        <div class="header-actions">
+                            <button class="btn btn-primary" id="btn-new-product">
+                                <i class="fa-solid fa-plus"></i>
+                                Nuevo Producto
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Categoría</th>
+                                        <th>Stock</th>
+                                        <th>Mínimo</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-table">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Delivery View -->
+                <section id="view-delivery" class="view">
+                    <div class="view-header">
+                        <h1>Nueva Entrega</h1>
+                        <p>Registro de salida de materiales para funcionarios.</p>
+                    </div>
+                    <div class="delivery-container">
+                        <div class="card delivery-form-card">
+                            <form id="delivery-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Funcionario Responsable</label>
+                                        <select id="delivery-staff" class="form-control" required>
+                                            <option value="">Seleccione un funcionario...</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="material-selector card-inner">
+                                    <h3>Selección de Materiales</h3>
+                                    <div class="selector-row">
+                                        <select id="product-select" class="form-control">
+                                            <option value="">Elegir producto...</option>
+                                        </select>
+                                        <input type="number" id="product-qty" class="form-control" placeholder="Cant." min="1">
+                                        <button type="button" class="btn btn-secondary" id="add-to-list">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <div class="selected-list">
+                                        <table class="data-table small">
+                                            <thead>
+                                                <tr>
+                                                    <th>Material</th>
+                                                    <th>Cant.</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="delivery-list">
+                                                <!-- Added items -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="form-group mt-20">
+                                    <label>Observaciones / Referencia</label>
+                                    <textarea id="delivery-ref" class="form-control" rows="2" placeholder="N° Orden, motivo, etc."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block mt-20">
+                                    <i class="fa-solid fa-check"></i>
+                                    Confirmar y Procesar Entrega
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- History View -->
+                <section id="view-history" class="view">
+                    <div class="view-header">
+                        <h1>Historial de Movimientos</h1>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Producto</th>
+                                        <th>Cant.</th>
+                                        <th>Responsable</th>
+                                        <th>Referencia</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-table">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Staff View -->
+                <section id="view-staff" class="view">
+                    <div class="view-header">
+                        <h1>Gestión de Funcionarios</h1>
+                        <div class="header-actions">
+                            <button class="btn btn-primary" id="btn-new-staff">
+                                <i class="fa-solid fa-user-plus"></i>
+                                Nuevo Funcionario
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>RUT</th>
+                                        <th>Departamento</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="staff-table-body">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="product-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="modal-title">Registrar Producto</h2>
+                <button class="btn-close" onclick="ui.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="product-form">
+                <input type="hidden" id="prod-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="prod-name" class="form-control" required placeholder="Ej. Plumones Pizarra Azul">
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Categoría</label>
+                            <select id="prod-category" class="form-control" required>
+                                <option value="Oficina">Oficina</option>
+                                <option value="Limpieza">Limpieza</option>
+                                <option value="Tecnología">Tecnología</option>
+                                <option value="Didáctico">Didáctico</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Stock Mínimo</label>
+                            <input type="number" id="prod-min-stock" class="form-control" required min="0" value="5">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción</label>
+                        <textarea id="prod-desc" class="form-control" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="ui.closeModals()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Staff Modal -->
+    <div id="staff-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2 id="staff-modal-title">Registrar Funcionario</h2>
+                <button class="btn-close" onclick="ui.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="staff-form">
+                <input type="hidden" id="staff-id">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="staff-name" class="form-control" required placeholder="Ej. Juan Pérez">
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>RUT / ID</label>
+                            <input type="text" id="staff-rut" class="form-control" required placeholder="12.345.678-9">
+                        </div>
+                        <div class="form-group">
+                            <label>Departamento</label>
+                            <input type="text" id="staff-dept" class="form-control" required placeholder="Ej. Matemáticas">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="ui.closeModals()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Funcionario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Firebase SDK (Placeholders for now) -->
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
