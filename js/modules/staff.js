@@ -3,6 +3,7 @@
  */
 import { db } from '../db.js';
 import { ui } from './ui.js';
+import { staffSeed } from '../seed.js';
 
 export const staff = {
     renderStaff() {
@@ -44,6 +45,23 @@ export const staff = {
         document.getElementById('staff-dept').value = s.departamento;
         
         ui.openModal('staff-modal');
+    },
+
+    async importFromSeed() {
+        if (!confirm(`¿Deseas importar ${staffSeed.length} funcionarios desde los archivos de la escuela?`)) return;
+        
+        ui.showToast('Iniciando importación...', 'info');
+        let count = 0;
+        try {
+            for (const s of staffSeed) {
+                await db.saveFuncionario(s);
+                count++;
+            }
+            ui.showToast(`Importación completada: ${count} funcionarios agregados.`, 'success');
+            this.renderStaff();
+        } catch (error) {
+            ui.showToast('Error en la importación: ' + error.message, 'danger');
+        }
     }
 };
 

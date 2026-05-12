@@ -309,6 +309,10 @@
                     <div class="view-header">
                         <h1>Gestión de Funcionarios</h1>
                         <div class="header-actions">
+                            <button class="btn btn-secondary" id="btn-import-staff">
+                                <i class="fa-solid fa-file-import"></i>
+                                Importar Funcionarios
+                            </button>
                             <button class="btn btn-primary" id="btn-new-staff">
                                 <i class="fa-solid fa-user-plus"></i>
                                 Nuevo Funcionario
@@ -364,6 +368,16 @@
                         <div class="form-group">
                             <label>Stock Mínimo</label>
                             <input type="number" id="prod-min-stock" class="form-control" required min="0" value="5">
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Orden de Compra (Opcional)</label>
+                            <input type="text" id="prod-oc" class="form-control" placeholder="Ej. OC-12345">
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Recepción (Opcional)</label>
+                            <input type="date" id="prod-receipt-date" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">

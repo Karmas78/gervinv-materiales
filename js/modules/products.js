@@ -50,6 +50,8 @@ export const products = {
         document.getElementById('prod-category').value = p.categoria;
         document.getElementById('prod-min-stock').value = p.stock_minimo;
         document.getElementById('prod-desc').value = p.descripcion || '';
+        document.getElementById('prod-oc').value = p.orden_compra || '';
+        document.getElementById('prod-receipt-date').value = p.fecha_recepcion || '';
         
         ui.openModal('product-modal');
     },

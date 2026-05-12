@@ -114,7 +114,9 @@ const app = {
                 nombre: document.getElementById('prod-name').value,
                 categoria: document.getElementById('prod-category').value,
                 stock_minimo: parseInt(document.getElementById('prod-min-stock').value),
-                descripcion: document.getElementById('prod-desc').value
+                descripcion: document.getElementById('prod-desc').value,
+                orden_compra: document.getElementById('prod-oc').value,
+                fecha_recepcion: document.getElementById('prod-receipt-date').value
             };
             await products.save(formData);
         });
@@ -127,6 +129,8 @@ const app = {
         });
         
         // Staff
+        document.getElementById('btn-import-staff').addEventListener('click', () => staff.importFromSeed());
+
         document.getElementById('btn-new-staff').addEventListener('click', () => {
             document.getElementById('staff-form').reset();
             document.getElementById('staff-id').value = '';

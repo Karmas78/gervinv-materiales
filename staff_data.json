@@ -1,0 +1,317 @@
+[
+  {
+    "nombre": "Mauricio Antonio Espinosa Gaete",
+    "rut": "10194961-3",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Jacqueline Del Carmen Barrios Poblete",
+    "rut": "10362867-9",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "María Teresa Guerra Mateo",
+    "rut": "11327859-5",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Elizabeth Antonia Carvajal Rivera",
+    "rut": "11513228-8",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Viviana Lorena Espinosa Araya",
+    "rut": "12426594-0",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Marisel Fabiola Alfaro Tapia",
+    "rut": "12572142-7",
+    "departamento": "INSPECTOR GENERAL"
+  },
+  {
+    "nombre": "Karla Angélica Gutiérrez Adaros",
+    "rut": "15041246-3",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Héctor Andrés Rojas Hermosilla",
+    "rut": "15572011-5",
+    "departamento": "DIRECTOR(A)"
+  },
+  {
+    "nombre": "Jocelyn Fernanda Serrano Araya",
+    "rut": "15572206-1",
+    "departamento": "PLANTA TÉCNICO-PEDAGÓGICA"
+  },
+  {
+    "nombre": "Mery Alejandra Zavala Moruna",
+    "rut": "15695056-4",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Lezly Makarena Tabilo Vigorena",
+    "rut": "15802346-6",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Paula Andrea Tapia Cisternas",
+    "rut": "16110588-0",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Marcia Alejandra González Pérez",
+    "rut": "16324099-8",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Nicole Stephanie Boussellet Rojas",
+    "rut": "16326094-8",
+    "departamento": "JEFE UNIDAD TÉCNICO-PEDAGÓGICA"
+  },
+  {
+    "nombre": "Jocelyn Yanina Contreras Ogalde",
+    "rut": "16596238-9",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Yesenia Melissa Bolvarán Castillo",
+    "rut": "16848028-8",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Ana Yesenia Araya Zepeda",
+    "rut": "17114129-K",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Cristian Elías Toledo Pérez",
+    "rut": "17362751-3",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Sirly Daniela Carvajal Hidalgo",
+    "rut": "17364736-0",
+    "departamento": "OTRA EN EL ESTABLECIMIENTO"
+  },
+  {
+    "nombre": "Nicole Solange Valdivia Vega",
+    "rut": "17711231-3",
+    "departamento": "PLANTA TÉCNICO-PEDAGÓGICA"
+  },
+  {
+    "nombre": "Paulette Jacqueline Rojas Rojas",
+    "rut": "17712225-4",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Karina Elizabeth Marambio Campos",
+    "rut": "17713538-0",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Constanza Marion Marilaf Ibacache",
+    "rut": "18003234-7",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Iván Alejandro Castillo Toro",
+    "rut": "18010966-8",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Karla Nicole Godoy Tapia",
+    "rut": "18012361-K",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Vanessa Fernanda Araya Galleguillos",
+    "rut": "18352031-8",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Elizabeth Fernanda Contreras Díaz",
+    "rut": "18353252-9",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Julia Valesca Araya Cortés",
+    "rut": "19668216-3",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Cristian Alan Olivares Reyes",
+    "rut": "7429811-7",
+    "departamento": "DOCENTE DE AULA"
+  },
+  {
+    "nombre": "Belmar Antonio Candia Gallardo",
+    "rut": "8005296-0",
+    "departamento": "ORIENTADOR"
+  },
+  {
+    "nombre": "Elizabeth Jeanette Pizarro Olivares",
+    "rut": "9179701-1",
+    "departamento": "PLANTA TÉCNICO-PEDAGÓGICA"
+  },
+  {
+    "nombre": "Paz Darlet Piñones Ardiles",
+    "rut": "20616300-3",
+    "departamento": "PSICÓLOGO/A"
+  },
+  {
+    "nombre": "Diana Antonia Barahona Carvajal",
+    "rut": "20309458-2",
+    "departamento": "ASISTENTE DIFERENCIAL"
+  },
+  {
+    "nombre": "Camila Susana Rivera Cabrera",
+    "rut": "19945079-4",
+    "departamento": "ASISTENTE DIFERENCIAL"
+  },
+  {
+    "nombre": "Javiera Soledad Pizarro Olmedo",
+    "rut": "19301931-5",
+    "departamento": "ASISTENTE/TÉCNICO PÁRVULOS"
+  },
+  {
+    "nombre": "Macarena Stefanie Plaza Cortés",
+    "rut": "18351730-9",
+    "departamento": "ASISTENTE ADMINISTRATIVO"
+  },
+  {
+    "nombre": "Sara Rosa Rivera Olivares",
+    "rut": "18179128-4",
+    "departamento": "PSICÓLOGO/A"
+  },
+  {
+    "nombre": "Cecilia Fernanda Cortés Tirado",
+    "rut": "17712563-6",
+    "departamento": "RECEPCIONISTA"
+  },
+  {
+    "nombre": "Camila Sofía Gana Pérez",
+    "rut": "17362167-1",
+    "departamento": "ASISTENTE/TÉCNICO PÁRVULOS"
+  },
+  {
+    "nombre": "Leslie Katalina Cerda Contreras",
+    "rut": "17316975-2",
+    "departamento": "ASISTENTE DIFERENCIAL"
+  },
+  {
+    "nombre": "Alice Johanna Villegas Núñez",
+    "rut": "17310386-7",
+    "departamento": "ASISTENTE ADMINISTRATIVO"
+  },
+  {
+    "nombre": "Camila Francisca Rojas Pérez",
+    "rut": "17191225-3",
+    "departamento": "ASISTENTE/TÉCNICO PÁRVULOS"
+  },
+  {
+    "nombre": "Johanna Marlene Vega Campusano",
+    "rut": "17112489-1",
+    "departamento": "INSPECTOR/A"
+  },
+  {
+    "nombre": "Scarlett Gladys Rodríguez Segovia",
+    "rut": "17093648-5",
+    "departamento": "KINESIÓLOGO"
+  },
+  {
+    "nombre": "Samuel Esteban Honores Pereira",
+    "rut": "16597229-5",
+    "departamento": "SOPORTE INFORMÁTICO"
+  },
+  {
+    "nombre": "Francy Alejandra Irigoyen Cortés",
+    "rut": "16596517-5",
+    "departamento": "FONOAUDIÓLOGO/A"
+  },
+  {
+    "nombre": "Otto Hans Heckersdorf Mardones",
+    "rut": "15968490-3",
+    "departamento": "CUIDADO DEL ESTABLECIMIENTO"
+  },
+  {
+    "nombre": "María José Rodríguez Rodríguez",
+    "rut": "15573266-0",
+    "departamento": "ASISTENTE/TÉCNICO PÁRVULOS"
+  },
+  {
+    "nombre": "Luis Andrés Retamales Castro",
+    "rut": "15041774-0",
+    "departamento": "CUIDADO DEL ESTABLECIMIENTO"
+  },
+  {
+    "nombre": "Rosa Ana Rodríguez Carvajal",
+    "rut": "14313672-8",
+    "departamento": "AUXILIAR DE SERVICIOS MENORES"
+  },
+  {
+    "nombre": "Paola Andrea Ledezma Ledezma",
+    "rut": "13535109-1",
+    "departamento": "ENCARGADO/A DE IMPRESIONES"
+  },
+  {
+    "nombre": "Jocelyn Monserrat Elgueta Vega",
+    "rut": "13534936-4",
+    "departamento": "ASISTENTE SOCIAL"
+  },
+  {
+    "nombre": "Victoria Del Rosario Sierra Araya",
+    "rut": "12420422-4",
+    "departamento": "AUXILIAR DE SERVICIOS MENORES"
+  },
+  {
+    "nombre": "Mónica Juana Saavedra George",
+    "rut": "12347771-5",
+    "departamento": "AUXILIAR DE ASEO"
+  },
+  {
+    "nombre": "María Alejandra Ramírez Corrotea",
+    "rut": "11748290-1",
+    "departamento": "INSPECTOR/A"
+  },
+  {
+    "nombre": "María Alejandra Fuentes Leiva",
+    "rut": "11512134-0",
+    "departamento": "BIBLIOTECARIO/A ENCARGADO/A CRA"
+  },
+  {
+    "nombre": "Gloria Cecilia Elgueda Villegas",
+    "rut": "11382807-2",
+    "departamento": "ASISTENTE/TÉCNICO PÁRVULOS"
+  },
+  {
+    "nombre": "María Francisca Ramos Ramos",
+    "rut": "10840264-4",
+    "departamento": "SECRETARIO/A"
+  },
+  {
+    "nombre": "Manuel Alejandro Valdés Díaz",
+    "rut": "10642230-3",
+    "departamento": "CUIDADO DEL ESTABLECIMIENTO"
+  },
+  {
+    "nombre": "Luis Humberto Pizarro Carter",
+    "rut": "9362015-1",
+    "departamento": "ENCARGADO/A DE MANTENCIÓN"
+  },
+  {
+    "nombre": "Magaly Soledad Tapia Godoy",
+    "rut": "9336953-K",
+    "departamento": "SECRETARIO/A"
+  },
+  {
+    "nombre": "Fernando Alfonso Toledo Ledezma",
+    "rut": "8382714-9",
+    "departamento": "CUIDADO DEL ESTABLECIMIENTO"
+  },
+  {
+    "nombre": "Daly Marilu Rodriguez Pascual",
+    "rut": "21340656-6",
+    "departamento": "ASISTENTE/TÉCNICO PÁRVULOS"
+  }
+]
