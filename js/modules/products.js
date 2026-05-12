@@ -11,7 +11,7 @@ export const products = {
         tbody.innerHTML = list.map(p => `
             <tr>
                 <td>
-                    <strong>${p.nombre}</strong>
+                    <strong>${p.nombre}</strong> ${p.marca ? `<small class="text-muted">(${p.marca})</small>` : ''}
                     <br><small class="text-muted">${p.descripcion || ''}</small>
                 </td>
                 <td>${p.categoria}</td>
@@ -47,6 +47,9 @@ export const products = {
         document.getElementById('modal-title').innerText = 'Editar Producto';
         document.getElementById('prod-id').value = p.id;
         document.getElementById('prod-name').value = p.nombre;
+        document.getElementById('prod-brand').value = p.marca || '';
+        document.getElementById('prod-initial-stock').disabled = true; // No permitir editar stock inicial al editar
+        document.getElementById('prod-initial-stock').value = 0;
         document.getElementById('prod-category').value = p.categoria;
         document.getElementById('prod-min-stock').value = p.stock_minimo;
         document.getElementById('prod-desc').value = p.descripcion || '';

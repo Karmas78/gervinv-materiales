@@ -5,6 +5,8 @@ import { db } from '../db.js';
 import { ui } from './ui.js';
 
 export const loans = {
+    tempList: [],
+
     init() {
         this.renderLoans();
         this.fillSelectors();
@@ -24,8 +26,48 @@ export const loans = {
         
         if (prodSelect) {
             prodSelect.innerHTML = '<option value="">Elegir equipo...</option>' +
-                prods.map(p => `<option value="${p.id}">${p.nombre} (Stock: ${p.stock_actual})</option>`).join('');
+                prods.map(p => `<option value="${p.id}">${p.nombre} ${p.marca ? `(${p.marca})` : ''} (Stock: ${p.stock_actual})</option>`).join('');
         }
+    },
+
+    addItem() {
+        const prodId = document.getElementById('loan-product').value;
+        const qty = parseInt(document.getElementById('loan-qty').value);
+        
+        if (!prodId || isNaN(qty) || qty <= 0) {
+            ui.showToast('Seleccione un equipo y cantidad válida', 'warning');
+            return;
+        }
+
+        const product = db.getProductos().find(p => p.id === prodId);
+        if (qty > product.stock_actual) {
+            ui.showToast('Stock insuficiente', 'danger');
+            return;
+        }
+
+        const fullName = `${product.nombre} ${product.marca ? `(${product.marca})` : ''}`;
+        this.tempList.push({ id: prodId, nombre: fullName, qty });
+        this.renderTempList();
+        
+        document.getElementById('loan-product').value = '';
+        document.getElementById('loan-qty').value = '';
+    },
+
+    renderTempList() {
+        const tbody = document.getElementById('loan-list');
+        if (!tbody) return;
+        tbody.innerHTML = this.tempList.map((item, idx) => `
+            <tr>
+                <td>${item.nombre}</td>
+                <td><strong>${item.qty}</strong></td>
+                <td><button type="button" class="btn-icon" onclick="loans.removeItem(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+            </tr>
+        `).join('');
+    },
+
+    removeItem(idx) {
+        this.tempList.splice(idx, 1);
+        this.renderTempList();
     },
 
     renderLoans() {
@@ -37,6 +79,7 @@ export const loans = {
             <tr class="${l.estado === 'PENDIENTE' ? 'row-pending' : 'row-returned'}">
                 <td>${ui.formatDate(l.fecha_prestamo)}</td>
                 <td><strong>${l.producto_nombre}</strong></td>
+                <td><strong>${l.cantidad || 1}</strong></td>
                 <td>${l.funcionario_nombre}</td>
                 <td>${l.fecha_devolucion_prevista ? new Date(l.fecha_devolucion_prevista).toLocaleDateString() : '-'}</td>
                 <td>
@@ -55,11 +98,31 @@ export const loans = {
         `).join('');
     },
 
-    async create(formData) {
+    async process() {
+        const staffSelect = document.getElementById('loan-staff');
+        const staffId = staffSelect.value;
+        const staffName = staffId ? staffSelect.options[staffSelect.selectedIndex].text : '';
+        const returnDate = document.getElementById('loan-return-date').value;
+        const obs = document.getElementById('loan-obs').value;
+
+        if (!staffId || this.tempList.length === 0) {
+            ui.showToast('Complete los datos del préstamo (funcionario y equipos)', 'warning');
+            return;
+        }
+
+        const formData = {
+            items: this.tempList,
+            funcionario_id: staffId,
+            funcionario_nombre: staffName,
+            fecha_devolucion_prevista: returnDate,
+            observaciones: obs
+        };
+
         try {
             await db.crearPrestamo(formData);
             ui.showToast('Préstamo registrado', 'success');
             ui.closeModals();
+            this.tempList = [];
             this.renderLoans();
         } catch (error) {
             ui.showToast(error.message, 'danger');

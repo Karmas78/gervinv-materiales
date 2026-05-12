@@ -24,7 +24,7 @@ export const delivery = {
         const prods = db.getProductos();
         const select = document.getElementById('product-select');
         select.innerHTML = '<option value="">Elegir producto...</option>' + 
-            prods.map(p => `<option value="${p.id}">${p.nombre} (S: ${p.stock_actual})</option>`).join('');
+            prods.map(p => `<option value="${p.id}">${p.nombre} ${p.marca ? `(${p.marca})` : ''} (S: ${p.stock_actual})</option>`).join('');
     },
 
     addItem() {
@@ -42,7 +42,8 @@ export const delivery = {
             return;
         }
 
-        this.tempList.push({ id: prodId, nombre: product.nombre, qty });
+        const fullName = `${product.nombre} ${product.marca ? `(${product.marca})` : ''}`;
+        this.tempList.push({ id: prodId, nombre: fullName, qty });
         this.renderTempList();
         
         // Reset inputs

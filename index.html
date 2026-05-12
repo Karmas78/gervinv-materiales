@@ -290,6 +290,7 @@
                                     <tr>
                                         <th>Fecha</th>
                                         <th>Equipo</th>
+                                        <th>Cant.</th>
                                         <th>Funcionario</th>
                                         <th>Devolución</th>
                                         <th>Estado</th>
@@ -351,9 +352,15 @@
             <form id="product-form">
                 <input type="hidden" id="prod-id">
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Nombre del Producto</label>
-                        <input type="text" id="prod-name" class="form-control" required placeholder="Ej. Plumones Pizarra Azul">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nombre del Producto</label>
+                            <input type="text" id="prod-name" class="form-control" required placeholder="Ej. Plumones Pizarra Azul">
+                        </div>
+                        <div class="form-group">
+                            <label>Marca</label>
+                            <input type="text" id="prod-brand" class="form-control" placeholder="Ej. Artel, Pilot, etc.">
+                        </div>
                     </div>
                     <div class="form-grid">
                         <div class="form-group">
@@ -364,6 +371,10 @@
                                 <option value="Tecnología">Tecnología</option>
                                 <option value="Didáctico">Didáctico</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Stock Inicial</label>
+                            <input type="number" id="prod-initial-stock" class="form-control" min="0" value="0">
                         </div>
                         <div class="form-group">
                             <label>Stock Mínimo</label>
@@ -436,16 +447,42 @@
             <form id="loan-form">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Equipo / Material</label>
-                        <select id="loan-product" class="form-control" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Funcionario</label>
+                        <label>Funcionario Responsable</label>
                         <select id="loan-staff" class="form-control" required></select>
                     </div>
-                    <div class="form-group">
-                        <label>Fecha Estimada de Devolución</label>
-                        <input type="date" id="loan-return-date" class="form-control">
+                    
+                    <div class="material-selector card-inner">
+                        <h3>Selección de Equipos</h3>
+                        <div class="selector-row">
+                            <select id="loan-product" class="form-control">
+                                <option value="">Elegir equipo...</option>
+                            </select>
+                            <input type="number" id="loan-qty" class="form-control" placeholder="Cant." min="1">
+                            <button type="button" class="btn btn-secondary" id="add-to-loan-list">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="selected-list mt-10">
+                            <table class="data-table small">
+                                <thead>
+                                    <tr>
+                                        <th>Equipo</th>
+                                        <th>Cant.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="loan-list">
+                                    <!-- Added items -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-grid mt-20">
+                        <div class="form-group">
+                            <label>Fecha Estimada de Devolución</label>
+                            <input type="date" id="loan-return-date" class="form-control">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Observaciones</label>

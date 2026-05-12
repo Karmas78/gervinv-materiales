@@ -68,11 +68,46 @@ class Database {
     }
 
     async saveProducto(product) {
+        let isExisting = false;
+        let existingId = null;
+
+        // Comprobar si existe por nombre y marca, solo si es un producto nuevo
+        if (!product.id) {
+            const prodNameLower = product.nombre.trim().toLowerCase();
+            const prodBrandLower = (product.marca || '').trim().toLowerCase();
+            
+            const existingProduct = this.cache.productos.find(p => 
+                p.nombre.trim().toLowerCase() === prodNameLower &&
+                (p.marca || '').trim().toLowerCase() === prodBrandLower
+            );
+
+            if (existingProduct) {
+                isExisting = true;
+                existingId = existingProduct.id;
+            }
+        }
+
+        if (isExisting) {
+            // Producto ya existe (con el mismo nombre y marca), solo agregamos el stock inicial mediante un movimiento
+            const quantityToAdd = Number(product.stock_actual || 0);
+            if (quantityToAdd > 0) {
+                await this.registrarMovimiento({
+                    tipo: 'ENTRADA',
+                    producto_id: existingId,
+                    cantidad: quantityToAdd,
+                    responsable: 'Sistema',
+                    referencia: 'Carga de stock adicional (Producto ya existente)'
+                });
+            }
+            return; // Termina aquí
+        }
+
         const id = product.id || `PR-${Date.now()}`;
         const prodRef = doc(db_firestore, 'productos', id);
         
         const data = {
             nombre: product.nombre,
+            marca: product.marca || '',
             categoria: product.categoria,
             stock_minimo: Number(product.stock_minimo),
             descripcion: product.descripcion || '',
@@ -80,6 +115,10 @@ class Database {
         };
 
         if (product.id) {
+            // Edición normal
+            // No podemos cambiar el stock_actual directamente al editar para no romper la consistencia,
+            // pero el usuario solo edita info básica
+            delete data.stock_actual; // Evitamos sobreescribir el stock actual en una edición
             await updateDoc(prodRef, data);
         } else {
             await setDoc(prodRef, data);
@@ -147,30 +186,37 @@ class Database {
     }
 
     async crearPrestamo(data) {
-        const prestamoId = `LN-${Date.now()}`;
-        const ref = doc(db_firestore, 'prestamos', prestamoId);
+        // data: { items: [{id, nombre, qty}], funcionario_id, funcionario_nombre, fecha_devolucion_prevista, observaciones }
+        const batchId = `LN-B-${Date.now()}`;
         
-        const payload = {
-            producto_id: data.producto_id,
-            producto_nombre: data.producto_nombre,
-            funcionario_id: data.funcionario_id,
-            funcionario_nombre: data.funcionario_nombre,
-            fecha_prestamo: new Date().toISOString(),
-            fecha_devolucion_prevista: data.fecha_devolucion_prevista,
-            estado: 'PENDIENTE',
-            observaciones: data.observaciones || ''
-        };
+        for (const item of data.items) {
+            const prestamoId = `LN-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+            const ref = doc(db_firestore, 'prestamos', prestamoId);
+            
+            const payload = {
+                producto_id: item.id,
+                producto_nombre: item.nombre,
+                cantidad: Number(item.qty),
+                funcionario_id: data.funcionario_id,
+                funcionario_nombre: data.funcionario_nombre,
+                fecha_prestamo: new Date().toISOString(),
+                fecha_devolucion_prevista: data.fecha_devolucion_prevista,
+                estado: 'PENDIENTE',
+                observaciones: data.observaciones || '',
+                batch_id: batchId
+            };
 
-        // Registrar la SALIDA de stock
-        await this.registrarMovimiento({
-            tipo: 'SALIDA',
-            producto_id: data.producto_id,
-            cantidad: 1,
-            responsable: data.funcionario_nombre,
-            referencia: `Préstamo Temporal - Ref: ${prestamoId}`
-        });
+            // Registrar la SALIDA de stock
+            await this.registrarMovimiento({
+                tipo: 'SALIDA',
+                producto_id: item.id,
+                cantidad: item.qty,
+                responsable: data.funcionario_nombre,
+                referencia: `Préstamo Temporal - Ref: ${prestamoId}`
+            });
 
-        await setDoc(ref, payload);
+            await setDoc(ref, payload);
+        }
     }
 
     async devolverPrestamo(prestamoId) {
@@ -183,7 +229,7 @@ class Database {
         await this.registrarMovimiento({
             tipo: 'ENTRADA',
             producto_id: prestamo.producto_id,
-            cantidad: 1,
+            cantidad: prestamo.cantidad || 1,
             responsable: 'Sistema (Devolución)',
             referencia: `Devolución de Préstamo - Ref: ${prestamoId}`
         });

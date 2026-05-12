@@ -103,6 +103,7 @@ const app = {
         document.getElementById('btn-new-product').addEventListener('click', () => {
             document.getElementById('product-form').reset();
             document.getElementById('prod-id').value = '';
+            document.getElementById('prod-initial-stock').disabled = false; // Permitir stock inicial en nuevo
             document.getElementById('modal-title').innerText = 'Registrar Producto';
             ui.openModal('product-modal');
         });
@@ -112,8 +113,10 @@ const app = {
             const formData = {
                 id: document.getElementById('prod-id').value,
                 nombre: document.getElementById('prod-name').value,
+                marca: document.getElementById('prod-brand').value,
                 categoria: document.getElementById('prod-category').value,
                 stock_minimo: parseInt(document.getElementById('prod-min-stock').value),
+                stock_actual: parseInt(document.getElementById('prod-initial-stock').value) || 0,
                 descripcion: document.getElementById('prod-desc').value,
                 orden_compra: document.getElementById('prod-oc').value,
                 fecha_recepcion: document.getElementById('prod-receipt-date').value
@@ -152,24 +155,17 @@ const app = {
         // Loans
         document.getElementById('btn-new-loan').addEventListener('click', () => {
             document.getElementById('loan-form').reset();
+            loans.tempList = [];
+            loans.renderTempList();
             loans.fillSelectors();
             ui.openModal('loan-modal');
         });
 
+        document.getElementById('add-to-loan-list').addEventListener('click', () => loans.addItem());
+
         document.getElementById('loan-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const prodSelect = document.getElementById('loan-product');
-            const staffSelect = document.getElementById('loan-staff');
-            
-            const formData = {
-                producto_id: prodSelect.value,
-                producto_nombre: prodSelect.options[prodSelect.selectedIndex].text.split(' (')[0],
-                funcionario_id: staffSelect.value,
-                funcionario_nombre: staffSelect.options[staffSelect.selectedIndex].text,
-                fecha_devolucion_prevista: document.getElementById('loan-return-date').value,
-                observaciones: document.getElementById('loan-obs').value
-            };
-            await loans.create(formData);
+            await loans.process();
         });
 
         // Theme Toggle
