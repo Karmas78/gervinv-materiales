@@ -10,6 +10,9 @@ import { staff } from './modules/staff.js';
 import { loans } from './modules/loans.js';
 
 const app = {
+    historySearchTerm: '',
+    historyTypeFilter: '',
+
     async init() {
         console.log('GervInv initializing with Firebase...');
         
@@ -99,8 +102,17 @@ const app = {
             });
         });
 
-        // Inventory
+        // --- Mobile Sidebar ---
+        document.getElementById('hamburger-btn').addEventListener('click', () => ui.toggleSidebar());
+        document.getElementById('sidebar-overlay').addEventListener('click', () => ui.closeSidebar());
+
+        // --- Notifications ---
+        document.getElementById('notif-btn').addEventListener('click', () => ui.toggleNotifPanel());
+        document.getElementById('notif-close').addEventListener('click', () => ui.closeNotifPanel());
+
+        // --- Inventory ---
         document.getElementById('btn-import-products').addEventListener('click', () => products.importFromSeed());
+        document.getElementById('btn-export-inventory').addEventListener('click', () => ui.exportInventory());
 
         document.getElementById('btn-new-product').addEventListener('click', () => {
             document.getElementById('product-form').reset();
@@ -126,14 +138,24 @@ const app = {
             await products.save(formData);
         });
 
-        // Delivery
+        // --- Inventory Search/Filter ---
+        document.getElementById('inventory-search').addEventListener('input', (e) => {
+            products.searchTerm = e.target.value;
+            products.renderInventory();
+        });
+        document.getElementById('inventory-category-filter').addEventListener('change', (e) => {
+            products.categoryFilter = e.target.value;
+            products.renderInventory();
+        });
+
+        // --- Delivery ---
         document.getElementById('add-to-list').addEventListener('click', () => delivery.addItem());
         document.getElementById('delivery-form').addEventListener('submit', (e) => {
             e.preventDefault();
             delivery.process();
         });
         
-        // Staff
+        // --- Staff ---
         document.getElementById('btn-import-staff').addEventListener('click', () => staff.importFromSeed());
 
         document.getElementById('btn-new-staff').addEventListener('click', () => {
@@ -154,7 +176,13 @@ const app = {
             await staff.save(formData);
         });
 
-        // Loans
+        // Staff Search
+        document.getElementById('staff-search').addEventListener('input', (e) => {
+            staff.searchTerm = e.target.value;
+            staff.renderStaff();
+        });
+
+        // --- Loans ---
         document.getElementById('btn-new-loan').addEventListener('click', () => {
             document.getElementById('loan-form').reset();
             loans.tempList = [];
@@ -170,20 +198,77 @@ const app = {
             await loans.process();
         });
 
+        // Loans Search/Filter
+        document.getElementById('loans-search').addEventListener('input', (e) => {
+            loans.searchTerm = e.target.value;
+            loans.renderLoans();
+        });
+        document.getElementById('loans-status-filter').addEventListener('change', (e) => {
+            loans.statusFilter = e.target.value;
+            loans.renderLoans();
+        });
+
+        // --- Loans Export ---
+        document.getElementById('btn-export-loans').addEventListener('click', () => ui.exportLoans());
+
+        // --- History Search/Filter ---
+        document.getElementById('history-search').addEventListener('input', (e) => {
+            this.historySearchTerm = e.target.value;
+            this.renderHistory();
+        });
+        document.getElementById('history-type-filter').addEventListener('change', (e) => {
+            this.historyTypeFilter = e.target.value;
+            this.renderHistory();
+        });
+
+        // --- History Export ---
+        document.getElementById('btn-export-history').addEventListener('click', () => ui.exportHistory());
+
         // Theme Toggle
         document.getElementById('theme-toggle').addEventListener('click', () => {
             const currentTheme = document.body.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('gervinv-theme', newTheme);
             const icon = document.querySelector('#theme-toggle i');
             icon.className = newTheme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
         });
+
+        // Restore saved theme
+        const savedTheme = localStorage.getItem('gervinv-theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            const icon = document.querySelector('#theme-toggle i');
+            if (icon) icon.className = 'fa-solid fa-sun';
+        }
     },
 
     renderHistory() {
-        const moves = db.getMovimientos();
+        let moves = db.getMovimientos();
         const tbody = document.getElementById('history-table');
         if (!tbody) return;
+
+        // Apply search filter
+        if (this.historySearchTerm) {
+            const term = this.historySearchTerm.toLowerCase();
+            moves = moves.filter(m => {
+                const product = db.getProductos().find(p => p.id === m.producto_id);
+                const prodName = product ? product.nombre.toLowerCase() : '';
+                return prodName.includes(term) ||
+                    (m.responsable || '').toLowerCase().includes(term) ||
+                    (m.referencia || '').toLowerCase().includes(term);
+            });
+        }
+
+        // Apply type filter
+        if (this.historyTypeFilter) {
+            moves = moves.filter(m => m.tipo === this.historyTypeFilter);
+        }
+
+        if (moves.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-muted); padding: 40px;">No se encontraron movimientos</td></tr>`;
+            return;
+        }
 
         tbody.innerHTML = moves.map(m => {
             const product = db.getProductos().find(p => p.id === m.producto_id);

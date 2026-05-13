@@ -42,8 +42,11 @@
 
     <!-- App Layout (Hidden by default) -->
     <div id="app-shell" class="app-shell" style="display: none;">
+        <!-- Mobile Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <i class="fa-solid fa-boxes-stacked"></i>
                 <h2>Gerv<span>Inv</span></h2>
@@ -58,16 +61,16 @@
                     <span>Inventario</span>
                 </a>
                 <a href="#" class="nav-item" data-view="loans">
-                    <i class="fa-solid fa-hand-holding-hand"></i>
+                    <i class="fa-solid fa-handshake"></i>
                     <span>Préstamos</span>
                 </a>
                 <a href="#" class="nav-item" data-view="delivery">
-                    <i class="fa-solid fa-truck-ramp-box"></i>
+                    <i class="fa-solid fa-truck"></i>
                     <span>Entregas</span>
                 </a>
                 <a href="#" class="nav-item" data-view="history">
                     <i class="fa-solid fa-clock-rotate-left"></i>
-                    <span>Movimientos</span>
+                    <span>Historial</span>
                 </a>
                 <a href="#" class="nav-item" data-view="staff">
                     <i class="fa-solid fa-users"></i>
@@ -76,10 +79,12 @@
             </nav>
             <div class="sidebar-footer">
                 <div class="user-profile">
-                    <div class="avatar" id="user-avatar">?</div>
+                    <div class="avatar" id="user-avatar">U</div>
                     <div class="user-details">
                         <span class="user-name" id="user-name">Usuario</span>
-                        <button class="btn-logout" id="logout-btn">Cerrar Sesión</button>
+                        <button class="btn-logout" id="logout-btn">
+                            <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+                        </button>
                     </div>
                 </div>
             </div>
@@ -89,6 +94,9 @@
         <main class="main-content">
             <!-- Top Header -->
             <header class="top-bar">
+                <button class="btn-icon hamburger-btn" id="hamburger-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
                 <div class="search-wrapper">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="global-search" placeholder="Buscar materiales, folios, funcionarios...">
@@ -97,12 +105,23 @@
                     <button class="btn-icon" id="theme-toggle" title="Cambiar Tema">
                         <i class="fa-solid fa-moon"></i>
                     </button>
-                    <button class="btn-icon notification-btn" id="notif-btn">
+                    <button class="btn-icon notification-btn" id="notif-btn" title="Alertas de Stock">
                         <i class="fa-solid fa-bell"></i>
-                        <span class="badge" id="notif-badge">0</span>
+                        <span class="notif-badge" id="notif-badge">0</span>
                     </button>
                 </div>
             </header>
+
+            <!-- Notifications Panel -->
+            <div class="notif-panel" id="notif-panel">
+                <div class="notif-panel-header">
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Alertas de Stock Crítico</h3>
+                    <button class="btn-close" id="notif-close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="notif-panel-body" id="notif-list">
+                    <!-- Dynamic alerts -->
+                </div>
+            </div>
 
             <!-- Dynamic Views Container -->
             <div id="view-container" class="view-container">
@@ -166,13 +185,33 @@
                         <div class="header-actions">
                             <button class="btn btn-secondary" id="btn-import-products">
                                 <i class="fa-solid fa-file-import"></i>
-                                Importar Productos
+                                <span class="btn-text">Importar Productos</span>
+                            </button>
+                            <button class="btn btn-secondary" id="btn-export-inventory">
+                                <i class="fa-solid fa-file-excel"></i>
+                                <span class="btn-text">Exportar Excel</span>
                             </button>
                             <button class="btn btn-primary" id="btn-new-product">
                                 <i class="fa-solid fa-plus"></i>
-                                Nuevo Producto
+                                <span class="btn-text">Nuevo Producto</span>
                             </button>
                         </div>
+                    </div>
+                    <!-- Search/Filter Bar -->
+                    <div class="filter-bar">
+                        <div class="filter-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="inventory-search" placeholder="Buscar por nombre, marca o descripción...">
+                        </div>
+                        <select id="inventory-category-filter" class="form-control filter-select">
+                            <option value="">Todas las categorías</option>
+                            <option value="Oficina">Oficina</option>
+                            <option value="Escritura">Escritura</option>
+                            <option value="Tecnología">Tecnología</option>
+                            <option value="Limpieza">Limpieza</option>
+                            <option value="Deportes">Deportes</option>
+                            <option value="Didáctico">Didáctico</option>
+                        </select>
                     </div>
                     <div class="card">
                         <div class="table-responsive">
@@ -254,6 +293,24 @@
                 <section id="view-history" class="view">
                     <div class="view-header">
                         <h1>Historial de Movimientos</h1>
+                        <div class="header-actions">
+                            <button class="btn btn-secondary" id="btn-export-history">
+                                <i class="fa-solid fa-file-excel"></i>
+                                <span class="btn-text">Exportar Excel</span>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- Search/Filter Bar -->
+                    <div class="filter-bar">
+                        <div class="filter-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="history-search" placeholder="Buscar por producto, responsable...">
+                        </div>
+                        <select id="history-type-filter" class="form-control filter-select">
+                            <option value="">Todos los tipos</option>
+                            <option value="ENTRADA">Entrada</option>
+                            <option value="SALIDA">Salida</option>
+                        </select>
                     </div>
                     <div class="card">
                         <div class="table-responsive">
@@ -281,11 +338,27 @@
                     <div class="view-header">
                         <h1>Préstamos de Equipos</h1>
                         <div class="header-actions">
+                            <button class="btn btn-secondary" id="btn-export-loans">
+                                <i class="fa-solid fa-file-excel"></i>
+                                <span class="btn-text">Exportar Excel</span>
+                            </button>
                             <button class="btn btn-primary" id="btn-new-loan">
                                 <i class="fa-solid fa-plus"></i>
-                                Nuevo Préstamo
+                                <span class="btn-text">Nuevo Préstamo</span>
                             </button>
                         </div>
+                    </div>
+                    <!-- Search/Filter Bar -->
+                    <div class="filter-bar">
+                        <div class="filter-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="loans-search" placeholder="Buscar por equipo o funcionario...">
+                        </div>
+                        <select id="loans-status-filter" class="form-control filter-select">
+                            <option value="">Todos los estados</option>
+                            <option value="PENDIENTE">Pendiente</option>
+                            <option value="DEVUELTO">Devuelto</option>
+                        </select>
                     </div>
                     <div class="card">
                         <div class="table-responsive">
@@ -316,12 +389,19 @@
                         <div class="header-actions">
                             <button class="btn btn-secondary" id="btn-import-staff">
                                 <i class="fa-solid fa-file-import"></i>
-                                Importar Funcionarios
+                                <span class="btn-text">Importar Funcionarios</span>
                             </button>
                             <button class="btn btn-primary" id="btn-new-staff">
                                 <i class="fa-solid fa-user-plus"></i>
-                                Nuevo Funcionario
+                                <span class="btn-text">Nuevo Funcionario</span>
                             </button>
+                        </div>
+                    </div>
+                    <!-- Search/Filter Bar -->
+                    <div class="filter-bar">
+                        <div class="filter-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="staff-search" placeholder="Buscar por nombre, RUT o departamento...">
                         </div>
                     </div>
                     <div class="card">
@@ -371,8 +451,10 @@
                             <label>Categoría</label>
                             <select id="prod-category" class="form-control" required>
                                 <option value="Oficina">Oficina</option>
+                                <option value="Escritura">Escritura</option>
                                 <option value="Limpieza">Limpieza</option>
                                 <option value="Tecnología">Tecnología</option>
+                                <option value="Deportes">Deportes</option>
                                 <option value="Didáctico">Didáctico</option>
                             </select>
                         </div>

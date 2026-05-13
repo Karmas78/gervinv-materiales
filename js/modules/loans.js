@@ -6,6 +6,8 @@ import { ui } from './ui.js';
 
 export const loans = {
     tempList: [],
+    searchTerm: '',
+    statusFilter: '',
 
     init() {
         this.renderLoans();
@@ -71,9 +73,28 @@ export const loans = {
     },
 
     renderLoans() {
-        const list = db.getPrestamos();
+        let list = db.getPrestamos();
         const tbody = document.getElementById('loans-table-body');
         if (!tbody) return;
+
+        // Apply search filter
+        if (this.searchTerm) {
+            const term = this.searchTerm.toLowerCase();
+            list = list.filter(l =>
+                (l.producto_nombre || '').toLowerCase().includes(term) ||
+                (l.funcionario_nombre || '').toLowerCase().includes(term)
+            );
+        }
+
+        // Apply status filter
+        if (this.statusFilter) {
+            list = list.filter(l => l.estado === this.statusFilter);
+        }
+
+        if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color: var(--text-muted); padding: 40px;">No se encontraron préstamos</td></tr>`;
+            return;
+        }
 
         tbody.innerHTML = list.sort((a,b) => new Date(b.fecha_prestamo) - new Date(a.fecha_prestamo)).map(l => `
             <tr class="${l.estado === 'PENDIENTE' ? 'row-pending' : 'row-returned'}">

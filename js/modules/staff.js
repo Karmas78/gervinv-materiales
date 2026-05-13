@@ -6,10 +6,27 @@ import { ui } from './ui.js';
 import { staffSeed } from '../seed.js';
 
 export const staff = {
+    searchTerm: '',
+
     renderStaff() {
-        const list = db.getFuncionarios();
+        let list = db.getFuncionarios();
         const tbody = document.getElementById('staff-table-body');
         if (!tbody) return;
+
+        // Apply search filter
+        if (this.searchTerm) {
+            const term = this.searchTerm.toLowerCase();
+            list = list.filter(s =>
+                s.nombre.toLowerCase().includes(term) ||
+                s.rut.toLowerCase().includes(term) ||
+                s.departamento.toLowerCase().includes(term)
+            );
+        }
+
+        if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-muted); padding: 40px;">No se encontraron funcionarios</td></tr>`;
+            return;
+        }
         
         tbody.innerHTML = list.map(s => `
             <tr>

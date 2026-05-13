@@ -6,9 +6,35 @@ import { ui } from './ui.js';
 import { productSeed } from '../seed.js';
 
 export const products = {
+    searchTerm: '',
+    categoryFilter: '',
+
     renderInventory() {
-        const list = db.getProductos();
+        let list = db.getProductos();
+
+        // Apply search filter
+        if (this.searchTerm) {
+            const term = this.searchTerm.toLowerCase();
+            list = list.filter(p =>
+                p.nombre.toLowerCase().includes(term) ||
+                (p.marca || '').toLowerCase().includes(term) ||
+                (p.descripcion || '').toLowerCase().includes(term)
+            );
+        }
+
+        // Apply category filter
+        if (this.categoryFilter) {
+            list = list.filter(p => p.categoria === this.categoryFilter);
+        }
+
         const tbody = document.getElementById('inventory-table');
+        if (!tbody) return;
+
+        if (list.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding: 40px;">No se encontraron productos</td></tr>`;
+            return;
+        }
+
         tbody.innerHTML = list.map(p => `
             <tr>
                 <td>
@@ -64,19 +90,37 @@ export const products = {
         const list = db.getProductos();
         const critical = list.filter(p => p.stock_actual <= p.stock_minimo);
         
-        document.getElementById('stat-total-products').innerText = list.length;
-        document.getElementById('stat-critical-stock').innerText = critical.length;
+        const totalEl = document.getElementById('stat-total-products');
+        const criticalEl = document.getElementById('stat-critical-stock');
+        if (totalEl) totalEl.innerText = list.length;
+        if (criticalEl) criticalEl.innerText = critical.length;
+
+        // Update deliveries today count
+        const today = new Date().toISOString().split('T')[0];
+        const moves = db.getMovimientos();
+        const todayDeliveries = moves.filter(m => m.tipo === 'SALIDA' && m.fecha && m.fecha.startsWith(today));
+        const delivEl = document.getElementById('stat-deliveries-today');
+        if (delivEl) delivEl.innerText = todayDeliveries.length;
         
         const criticalTable = document.getElementById('critical-stock-table');
-        criticalTable.innerHTML = critical.map(p => `
-            <tr>
-                <td><strong>${p.nombre}</strong></td>
-                <td>${p.categoria}</td>
-                <td><span class="badge-warning badge">${p.stock_actual}</span></td>
-                <td>${p.stock_minimo}</td>
-                <td style="color: var(--danger); font-weight: 600;">REABASTECER</td>
-            </tr>
-        `).join('');
+        if (!criticalTable) return;
+
+        if (critical.length === 0) {
+            criticalTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--success); padding: 30px;"><i class="fa-solid fa-circle-check"></i> Todo el stock en orden</td></tr>`;
+        } else {
+            criticalTable.innerHTML = critical.map(p => `
+                <tr>
+                    <td><strong>${p.nombre}</strong> ${p.marca ? `<small class="text-muted">(${p.marca})</small>` : ''}</td>
+                    <td>${p.categoria}</td>
+                    <td><span class="badge badge-warning">${p.stock_actual}</span></td>
+                    <td>${p.stock_minimo}</td>
+                    <td style="color: var(--danger); font-weight: 600;">REABASTECER</td>
+                </tr>
+            `).join('');
+        }
+
+        // Update notification panel
+        ui.updateNotifications();
     },
 
     async importFromSeed() {
