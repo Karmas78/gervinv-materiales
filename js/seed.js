@@ -63,3 +63,45 @@ export const staffSeed = [
   { "nombre": "Fernando Alfonso Toledo Ledezma", "rut": "8382714-9", "departamento": "CUIDADO DEL ESTABLECIMIENTO" },
   { "nombre": "Daly Marilu Rodriguez Pascual", "rut": "21340656-6", "departamento": "ASISTENTE/TÉCNICO PÁRVULOS" }
 ];
+
+export const productSeed = [
+  // --- OFICINA ---
+  { nombre: "Resma Papel Carta", marca: "Chamex", categoria: "Oficina", stock_actual: 50, stock_minimo: 10, descripcion: "Papel bond 75g, tamaño carta" },
+  { nombre: "Resma Papel Oficio", marca: "Chamex", categoria: "Oficina", stock_actual: 30, stock_minimo: 8, descripcion: "Papel bond 75g, tamaño oficio" },
+  { nombre: "Tóner Impresora", marca: "HP 85A", categoria: "Oficina", stock_actual: 5, stock_minimo: 2, descripcion: "Tóner compatible impresora HP LaserJet" },
+  { nombre: "Tóner Impresora", marca: "Brother TN-1060", categoria: "Oficina", stock_actual: 4, stock_minimo: 2, descripcion: "Tóner para impresora Brother" },
+  { nombre: "Carpeta Archivador", marca: "Oficio", categoria: "Oficina", stock_actual: 25, stock_minimo: 5, descripcion: "Carpeta archivador lomo ancho" },
+  { nombre: "Sobre Manila", marca: "Genérico", categoria: "Oficina", stock_actual: 100, stock_minimo: 20, descripcion: "Sobre manila tamaño oficio" },
+  { nombre: "Cinta Adhesiva", marca: "Scotch", categoria: "Oficina", stock_actual: 15, stock_minimo: 5, descripcion: "Cinta adhesiva transparente 18mm" },
+  { nombre: "Grapadora", marca: "Rapid", categoria: "Oficina", stock_actual: 8, stock_minimo: 2, descripcion: "Grapadora metálica de escritorio" },
+  { nombre: "Grapas 26/6", marca: "Rapid", categoria: "Oficina", stock_actual: 20, stock_minimo: 5, descripcion: "Caja de grapas estándar 26/6" },
+  { nombre: "Clips Metálicos", marca: "Genérico", categoria: "Oficina", stock_actual: 30, stock_minimo: 5, descripcion: "Caja de clips metálicos Nº1" },
+
+  // --- ESCRITURA ---
+  { nombre: "Lápiz Grafito", marca: "Faber-Castell", categoria: "Escritura", stock_actual: 200, stock_minimo: 50, descripcion: "Lápiz grafito HB Nº2" },
+  { nombre: "Bolígrafo Azul", marca: "Bic", categoria: "Escritura", stock_actual: 150, stock_minimo: 30, descripcion: "Bolígrafo cristal punta media azul" },
+  { nombre: "Bolígrafo Negro", marca: "Bic", categoria: "Escritura", stock_actual: 100, stock_minimo: 20, descripcion: "Bolígrafo cristal punta media negro" },
+  { nombre: "Bolígrafo Rojo", marca: "Bic", categoria: "Escritura", stock_actual: 80, stock_minimo: 15, descripcion: "Bolígrafo cristal punta media rojo" },
+  { nombre: "Plumón Pizarra", marca: "Pilot", categoria: "Escritura", stock_actual: 60, stock_minimo: 15, descripcion: "Plumón para pizarra blanca, varios colores" },
+  { nombre: "Marcador Permanente", marca: "Sharpie", categoria: "Escritura", stock_actual: 25, stock_minimo: 5, descripcion: "Marcador permanente punta fina negro" },
+  { nombre: "Corrector Líquido", marca: "Pentel", categoria: "Escritura", stock_actual: 20, stock_minimo: 5, descripcion: "Corrector líquido tipo lápiz" },
+
+  // --- TECNOLOGÍA ---
+  { nombre: "Cable HDMI", marca: "Genérico", categoria: "Tecnología", stock_actual: 6, stock_minimo: 2, descripcion: "Cable HDMI 2m alta velocidad" },
+  { nombre: "Adaptador VGA a HDMI", marca: "Ugreen", categoria: "Tecnología", stock_actual: 3, stock_minimo: 1, descripcion: "Adaptador para proyector" },
+  { nombre: "Mouse USB", marca: "Logitech", categoria: "Tecnología", stock_actual: 10, stock_minimo: 3, descripcion: "Mouse óptico USB con cable" },
+  { nombre: "Teclado USB", marca: "Logitech", categoria: "Tecnología", stock_actual: 5, stock_minimo: 2, descripcion: "Teclado estándar USB español" },
+  { nombre: "Pendrive 32GB", marca: "Kingston", categoria: "Tecnología", stock_actual: 8, stock_minimo: 3, descripcion: "Memoria USB 3.0 32GB" },
+  { nombre: "Pilas AA", marca: "Duracell", categoria: "Tecnología", stock_actual: 40, stock_minimo: 10, descripcion: "Pack de pilas alcalinas AA" },
+
+  // --- LIMPIEZA ---
+  { nombre: "Desinfectante Multiuso", marca: "Lysol", categoria: "Limpieza", stock_actual: 12, stock_minimo: 4, descripcion: "Spray desinfectante 500ml" },
+  { nombre: "Jabón Líquido", marca: "Genérico", categoria: "Limpieza", stock_actual: 15, stock_minimo: 5, descripcion: "Jabón líquido para dispensador 1L" },
+  { nombre: "Papel Higiénico", marca: "Elite", categoria: "Limpieza", stock_actual: 80, stock_minimo: 20, descripcion: "Rollo papel higiénico doble hoja" },
+  { nombre: "Toalla de Papel", marca: "Nova", categoria: "Limpieza", stock_actual: 30, stock_minimo: 10, descripcion: "Rollo toalla de papel absorbente" },
+
+  // --- DEPORTES ---
+  { nombre: "Balón de Fútbol", marca: "Molten", categoria: "Deportes", stock_actual: 5, stock_minimo: 2, descripcion: "Balón fútbol Nº5 uso escolar" },
+  { nombre: "Balón de Básquetbol", marca: "Molten", categoria: "Deportes", stock_actual: 3, stock_minimo: 1, descripcion: "Balón básquetbol Nº7" },
+  { nombre: "Conos de Entrenamiento", marca: "Genérico", categoria: "Deportes", stock_actual: 20, stock_minimo: 5, descripcion: "Conos plásticos señalización deportiva" }
+];

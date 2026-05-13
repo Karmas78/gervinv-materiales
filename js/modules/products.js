@@ -3,6 +3,7 @@
  */
 import { db } from '../db.js';
 import { ui } from './ui.js';
+import { productSeed } from '../seed.js';
 
 export const products = {
     renderInventory() {
@@ -76,6 +77,24 @@ export const products = {
                 <td style="color: var(--danger); font-weight: 600;">REABASTECER</td>
             </tr>
         `).join('');
+    },
+
+    async importFromSeed() {
+        if (!confirm(`¿Deseas importar ${productSeed.length} productos de prueba al inventario?`)) return;
+
+        ui.showToast('Iniciando importación de productos...', 'info');
+        let count = 0;
+        try {
+            for (const p of productSeed) {
+                await db.saveProducto(p);
+                count++;
+            }
+            ui.showToast(`Importación completada: ${count} productos agregados.`, 'success');
+            this.renderInventory();
+            this.updateDashboard();
+        } catch (error) {
+            ui.showToast('Error en la importación: ' + error.message, 'danger');
+        }
     }
 };
 

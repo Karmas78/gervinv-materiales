@@ -100,6 +100,8 @@ const app = {
         });
 
         // Inventory
+        document.getElementById('btn-import-products').addEventListener('click', () => products.importFromSeed());
+
         document.getElementById('btn-new-product').addEventListener('click', () => {
             document.getElementById('product-form').reset();
             document.getElementById('prod-id').value = '';
