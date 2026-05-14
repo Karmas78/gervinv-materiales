@@ -51,6 +51,7 @@ const app = {
         if (collectionName === 'productos') {
             products.renderInventory();
             products.updateDashboard();
+            products.updateDatalist();
             delivery.renderProductSelect(); // Refresh available products in delivery
         }
         if (collectionName === 'movimientos') {
@@ -60,6 +61,7 @@ const app = {
         if (collectionName === 'funcionarios') {
             staff.renderStaff();
             delivery.renderStaffSelect();
+            delivery.renderDeliveries(); // Show staff names in deliveries
             loans.fillSelectors();
         }
         if (collectionName === 'prestamos') {
@@ -99,6 +101,7 @@ const app = {
                 if (viewId === 'history') this.renderHistory();
                 if (viewId === 'staff') staff.renderStaff();
                 if (viewId === 'loans') loans.renderLoans();
+                if (viewId === 'delivery') delivery.renderDeliveries();
             });
         });
 
@@ -118,7 +121,8 @@ const app = {
             document.getElementById('product-form').reset();
             document.getElementById('prod-id').value = '';
             document.getElementById('prod-initial-stock').disabled = false; // Permitir stock inicial en nuevo
-            document.getElementById('modal-title').innerText = 'Registrar Producto';
+            document.getElementById('modal-title').innerText = 'Registrar Material';
+            products.updateDatalist();
             ui.openModal('product-modal');
         });
 
@@ -149,10 +153,39 @@ const app = {
         });
 
         // --- Delivery ---
+        const btnNewDelivery = document.getElementById('btn-new-delivery');
+        if (btnNewDelivery) {
+            btnNewDelivery.addEventListener('click', () => {
+                document.getElementById('delivery-form').reset();
+                delivery.tempList = [];
+                delivery.renderTempList();
+                delivery.renderProductSelect();
+                delivery.renderStaffSelect();
+                ui.openModal('delivery-modal');
+            });
+        }
+
+        const btnExportDeliveries = document.getElementById('btn-export-deliveries');
+        if (btnExportDeliveries) {
+            btnExportDeliveries.addEventListener('click', () => {
+                // Implement export functionality for deliveries if ui.js supports it
+                // ui.exportDeliveries(); 
+                ui.showToast('Exportación de entregas en desarrollo', 'info');
+            });
+        }
+
+        const deliverySearch = document.getElementById('delivery-search');
+        if (deliverySearch) {
+            deliverySearch.addEventListener('input', (e) => {
+                delivery.searchTerm = e.target.value;
+                delivery.renderDeliveries();
+            });
+        }
+
         document.getElementById('add-to-list').addEventListener('click', () => delivery.addItem());
-        document.getElementById('delivery-form').addEventListener('submit', (e) => {
+        document.getElementById('delivery-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            delivery.process();
+            await delivery.process();
         });
         
         // --- Staff ---

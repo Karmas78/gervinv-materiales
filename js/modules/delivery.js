@@ -11,6 +11,52 @@ export const delivery = {
     init() {
         this.renderStaffSelect();
         this.renderProductSelect();
+        this.renderDeliveries();
+    },
+
+    renderDeliveries() {
+        let moves = db.getMovimientos().filter(m => m.tipo === 'SALIDA');
+        const tbody = document.getElementById('deliveries-table-body');
+        if (!tbody) return;
+
+        if (this.searchTerm) {
+            const term = this.searchTerm.toLowerCase();
+            moves = moves.filter(m => 
+                (m.responsable || '').toLowerCase().includes(term) ||
+                (m.referencia || '').toLowerCase().includes(term)
+            );
+        }
+
+        if (moves.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color: var(--text-muted); padding: 40px;">No hay entregas registradas</td></tr>`;
+            return;
+        }
+
+        // Group by Date, Responsable, Referencia
+        const grouped = {};
+        moves.forEach(m => {
+            const key = `${m.fecha}-${m.responsable}-${m.referencia}`;
+            if (!grouped[key]) {
+                grouped[key] = {
+                    fecha: m.fecha,
+                    responsable: m.responsable,
+                    referencia: m.referencia,
+                    items: []
+                };
+            }
+            const product = db.getProductos().find(p => p.id === m.producto_id);
+            const pName = product ? product.nombre : 'Material eliminado';
+            grouped[key].items.push(`${pName} (${m.cantidad})`);
+        });
+
+        tbody.innerHTML = Object.values(grouped).sort((a,b) => new Date(b.fecha) - new Date(a.fecha)).map(g => `
+            <tr>
+                <td>${ui.formatDate(g.fecha)}</td>
+                <td>${g.responsable}</td>
+                <td>${g.items.join('<br>')}</td>
+                <td><small>${g.referencia || '-'}</small></td>
+            </tr>
+        `).join('');
     },
 
     renderStaffSelect() {
@@ -23,7 +69,7 @@ export const delivery = {
     renderProductSelect() {
         const prods = db.getProductos();
         const select = document.getElementById('product-select');
-        select.innerHTML = '<option value="">Elegir producto...</option>' + 
+        select.innerHTML = '<option value="">Elegir material...</option>' + 
             prods.map(p => `<option value="${p.id}">${p.nombre} ${p.marca ? `(${p.marca})` : ''} (S: ${p.stock_actual})</option>`).join('');
     },
 
@@ -32,7 +78,7 @@ export const delivery = {
         const qty = parseInt(document.getElementById('product-qty').value);
         
         if (!prodId || isNaN(qty) || qty <= 0) {
-            ui.showToast('Seleccione un producto y cantidad válida', 'warning');
+            ui.showToast('Seleccione un material y cantidad válida', 'warning');
             return;
         }
 
@@ -90,12 +136,14 @@ export const delivery = {
             }
 
             ui.showToast('Entrega procesada con éxito', 'success');
+            ui.closeModals();
             this.tempList = [];
             this.renderTempList();
             document.getElementById('delivery-form').reset();
             
             // Refresh other modules
             this.renderProductSelect();
+            this.renderDeliveries();
             products.renderInventory();
             products.updateDashboard();
         } catch (error) {

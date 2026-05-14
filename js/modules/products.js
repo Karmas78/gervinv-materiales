@@ -31,7 +31,7 @@ export const products = {
         if (!tbody) return;
 
         if (list.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding: 40px;">No se encontraron productos</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-muted); padding: 40px;">No se encontraron materiales</td></tr>`;
             return;
         }
 
@@ -58,7 +58,7 @@ export const products = {
     async save(formData) {
         try {
             await db.saveProducto(formData);
-            ui.showToast('Producto guardado correctamente', 'success');
+            ui.showToast('Material guardado correctamente', 'success');
             ui.closeModals();
             this.renderInventory();
             this.updateDashboard();
@@ -71,7 +71,7 @@ export const products = {
         const p = db.getProductos().find(prod => prod.id === id);
         if (!p) return;
         
-        document.getElementById('modal-title').innerText = 'Editar Producto';
+        document.getElementById('modal-title').innerText = 'Editar Material';
         document.getElementById('prod-id').value = p.id;
         document.getElementById('prod-name').value = p.nombre;
         document.getElementById('prod-brand').value = p.marca || '';
@@ -123,17 +123,26 @@ export const products = {
         ui.updateNotifications();
     },
 
-    async importFromSeed() {
-        if (!confirm(`¿Deseas importar ${productSeed.length} productos de prueba al inventario?`)) return;
+    updateDatalist() {
+        const list = db.getProductos();
+        const names = [...new Set(list.map(p => p.nombre))];
+        const datalist = document.getElementById('material-names-list');
+        if (datalist) {
+            datalist.innerHTML = names.map(n => `<option value="${n}">`).join('');
+        }
+    },
 
-        ui.showToast('Iniciando importación de productos...', 'info');
+    async importFromSeed() {
+        if (!confirm(`¿Deseas importar ${productSeed.length} materiales de prueba al inventario?`)) return;
+
+        ui.showToast('Iniciando importación de materiales...', 'info');
         let count = 0;
         try {
             for (const p of productSeed) {
                 await db.saveProducto(p);
                 count++;
             }
-            ui.showToast(`Importación completada: ${count} productos agregados.`, 'success');
+            ui.showToast(`Importación completada: ${count} materiales agregados.`, 'success');
             this.renderInventory();
             this.updateDashboard();
         } catch (error) {

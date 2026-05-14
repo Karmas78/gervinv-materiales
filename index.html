@@ -135,7 +135,7 @@
                         <div class="stat-card">
                             <div class="stat-icon purple"><i class="fa-solid fa-box-open"></i></div>
                             <div class="stat-info">
-                                <h3>Total Productos</h3>
+                                <h3>Total Materiales</h3>
                                 <p class="stat-value" id="stat-total-products">0</p>
                             </div>
                         </div>
@@ -163,7 +163,7 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th>Producto</th>
+                                        <th>Material</th>
                                         <th>Categoría</th>
                                         <th>Stock Actual</th>
                                         <th>Mínimo</th>
@@ -185,7 +185,7 @@
                         <div class="header-actions">
                             <button class="btn btn-secondary" id="btn-import-products">
                                 <i class="fa-solid fa-file-import"></i>
-                                <span class="btn-text">Importar Productos</span>
+                                <span class="btn-text">Importar Materiales</span>
                             </button>
                             <button class="btn btn-secondary" id="btn-export-inventory">
                                 <i class="fa-solid fa-file-excel"></i>
@@ -193,7 +193,7 @@
                             </button>
                             <button class="btn btn-primary" id="btn-new-product">
                                 <i class="fa-solid fa-plus"></i>
-                                <span class="btn-text">Nuevo Producto</span>
+                                <span class="btn-text">Nuevo Material</span>
                             </button>
                         </div>
                     </div>
@@ -236,55 +236,40 @@
                 <!-- Delivery View -->
                 <section id="view-delivery" class="view">
                     <div class="view-header">
-                        <h1>Nueva Entrega</h1>
-                        <p>Registro de salida de materiales para funcionarios.</p>
+                        <h1>Entregas de Materiales</h1>
+                        <div class="header-actions">
+                            <button class="btn btn-secondary" id="btn-export-deliveries">
+                                <i class="fa-solid fa-file-excel"></i>
+                                <span class="btn-text">Exportar Excel</span>
+                            </button>
+                            <button class="btn btn-primary" id="btn-new-delivery">
+                                <i class="fa-solid fa-plus"></i>
+                                <span class="btn-text">Nueva Entrega</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="delivery-container">
-                        <div class="card delivery-form-card">
-                            <form id="delivery-form">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label>Funcionario Responsable</label>
-                                        <select id="delivery-staff" class="form-control" required>
-                                            <option value="">Seleccione un funcionario...</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="material-selector card-inner">
-                                    <h3>Selección de Materiales</h3>
-                                    <div class="selector-row">
-                                        <select id="product-select" class="form-control">
-                                            <option value="">Elegir producto...</option>
-                                        </select>
-                                        <input type="number" id="product-qty" class="form-control" placeholder="Cant." min="1">
-                                        <button type="button" class="btn btn-secondary" id="add-to-list">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </button>
-                                    </div>
-                                    <div class="selected-list">
-                                        <table class="data-table small">
-                                            <thead>
-                                                <tr>
-                                                    <th>Material</th>
-                                                    <th>Cant.</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="delivery-list">
-                                                <!-- Added items -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="form-group mt-20">
-                                    <label>Observaciones / Referencia</label>
-                                    <textarea id="delivery-ref" class="form-control" rows="2" placeholder="N° Orden, motivo, etc."></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block mt-20">
-                                    <i class="fa-solid fa-check"></i>
-                                    Confirmar y Procesar Entrega
-                                </button>
-                            </form>
+                    <!-- Search/Filter Bar -->
+                    <div class="filter-bar">
+                        <div class="filter-search">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="delivery-search" placeholder="Buscar por responsable...">
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Funcionario</th>
+                                        <th>Materiales</th>
+                                        <th>Observaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="deliveries-table-body">
+                                    <!-- Dynamic content -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </section>
@@ -304,7 +289,7 @@
                     <div class="filter-bar">
                         <div class="filter-search">
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" id="history-search" placeholder="Buscar por producto, responsable...">
+                            <input type="text" id="history-search" placeholder="Buscar por material, responsable...">
                         </div>
                         <select id="history-type-filter" class="form-control filter-select">
                             <option value="">Todos los tipos</option>
@@ -319,7 +304,7 @@
                                     <tr>
                                         <th>Fecha</th>
                                         <th>Tipo</th>
-                                        <th>Producto</th>
+                                        <th>Material</th>
                                         <th>Cant.</th>
                                         <th>Responsable</th>
                                         <th>Referencia</th>
@@ -430,7 +415,7 @@
     <div id="product-modal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
-                <h2 id="modal-title">Registrar Producto</h2>
+                <h2 id="modal-title">Registrar Material</h2>
                 <button class="btn-close" onclick="ui.closeModals()"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <form id="product-form">
@@ -438,8 +423,9 @@
                 <div class="modal-body">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Nombre del Producto</label>
-                            <input type="text" id="prod-name" class="form-control" required placeholder="Ej. Plumones Pizarra Azul">
+                            <label>Nombre del Material</label>
+                            <input type="text" id="prod-name" class="form-control" list="material-names-list" required placeholder="Ej. Plumones Pizarra Azul">
+                            <datalist id="material-names-list"></datalist>
                         </div>
                         <div class="form-group">
                             <label>Marca</label>
@@ -484,7 +470,63 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="ui.closeModals()">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Producto</button>
+                    <button type="submit" class="btn btn-primary">Guardar Material</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delivery Modal -->
+    <div id="delivery-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Registrar Entrega</h2>
+                <button class="btn-close" onclick="ui.closeModals()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="delivery-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Funcionario Responsable</label>
+                        <select id="delivery-staff" class="form-control" required>
+                            <option value="">Seleccione un funcionario...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="material-selector card-inner mt-10">
+                        <h3>Selección de Materiales</h3>
+                        <div class="selector-row">
+                            <select id="product-select" class="form-control">
+                                <option value="">Elegir material...</option>
+                            </select>
+                            <input type="number" id="product-qty" class="form-control" placeholder="Cant." min="1">
+                            <button type="button" class="btn btn-secondary" id="add-to-list">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="selected-list mt-10">
+                            <table class="data-table small">
+                                <thead>
+                                    <tr>
+                                        <th>Material</th>
+                                        <th>Cant.</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="delivery-list">
+                                    <!-- Added items -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="form-group mt-20">
+                        <label>Observaciones / Referencia</label>
+                        <textarea id="delivery-ref" class="form-control" rows="2" placeholder="N° Orden, motivo, etc."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="ui.closeModals()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Confirmar Entrega</button>
                 </div>
             </form>
         </div>
